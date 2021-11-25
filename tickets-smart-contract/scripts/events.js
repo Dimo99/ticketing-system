@@ -12,7 +12,7 @@ const run = async function () {
     provider
   );
 
-  const contractAddress = "0x5D42EBdBBa61412295D7b0302d6F50aC449Ddb4F";
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
   const eventsContract = new ethers.Contract(
     contractAddress,
     Events.abi,
@@ -63,28 +63,34 @@ const run = async function () {
   //   eventResult1.availableTickets.toString(),
   //   eventResult1.fundsCollected.toString()
   // );
-  const randomString = "ай докажи са";
+  // const randomString = "ай докажи са";
 
-  console.log(randomString.length);
+  // console.log(randomString.length);
 
-  const signature = await wallet.signMessage(randomString);
+  // const signature = await wallet.signMessage(randomString);
 
-  const { v, r, s } = ethers.utils.splitSignature(signature);
+  // const { v, r, s } = ethers.utils.splitSignature(signature);
 
-  const address = ethers.utils.verifyMessage(randomString, { v, r, s });
+  // const address = ethers.utils.verifyMessage(randomString, { v, r, s });
 
-  console.log(address);
-  console.log(wallet.address);
+  // console.log(address);
+  // console.log(wallet.address);
 
-  const verifyTicketOwner = await eventsContract.verifyTicketOwner(
-    11,
-    randomString,
-    v,
-    r,
-    s
+  // const verifyTicketOwner = await eventsContract.verifyTicketOwner(
+  //   2,
+  //   randomString,
+  //   v,
+  //   r,
+  //   s
+  // );
+
+  // console.log(verifyTicketOwner);
+
+  console.log(
+    ethers.utils.splitSignature(
+      "0xe85088e8993b0f54d73bdc26a60433f6349c2d701049fd1cdb3ea2e35f9ab27e492526a5de8e9e2a5c2bafdee02aa9ddf5facee8a7414124b3bc6b17158dd5c31b"
+    )
   );
-
-  console.log(verifyTicketOwner);
 };
 
 run();

@@ -59,7 +59,8 @@ const App = () => {
   const [provider, setProvider] = useState<any>();
   const [fetching, setFetching] = useState<boolean>(false);
   const [address, setAddress] = useState<string>("");
-  const [library, setLibrary] = useState<any>(null);
+  const [web3Provider, setWeb3Provider] = useState<any>(null);
+  const [signer, setSigner] = useState<any>(null);
   const [connected, setConnected] = useState<boolean>(false);
   const [chainId, setChainId] = useState<number>(1);
   const [pendingRequest, setPedningRequest] = useState<boolean>(false);
@@ -75,6 +76,14 @@ const App = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (eventsContract) {
+      eventsContract.on("EventCreated", (eventId: any) => {
+        console.log("Event with Id created", eventId);
+      });
+    }
+  }, [eventsContract]);
+
   function createWeb3Modal() {
     web3Modal = new Web3Modal({
       network: getNetwork(),
@@ -87,14 +96,17 @@ const App = () => {
     const provider = await web3Modal.connect();
     setProvider(provider);
 
-    const library = new Web3Provider(provider);
+    const web3Provider = new Web3Provider(provider);
 
-    const network = await library.getNetwork();
+    const network = await web3Provider.getNetwork();
 
     const address = provider.selectedAddress
       ? provider.selectedAddress
       : provider?.accounts[0];
-    setLibrary(library);
+
+    const signer = web3Provider.getSigner();
+    setWeb3Provider(web3Provider);
+    setSigner(signer);
     setChainId(network.chainId);
     setAddress(address);
     setConnected(true);
@@ -104,7 +116,7 @@ const App = () => {
     const eventsContract = getContract(
       Events_Address,
       Events.abi,
-      library,
+      web3Provider,
       address
     );
 
@@ -150,7 +162,7 @@ const App = () => {
     const network = await library.getNetwork();
     const chainId = network.chainId;
     setChainId(chainId);
-    setLibrary(library);
+    setWeb3Provider(library);
   };
 
   function getNetwork() {
@@ -179,7 +191,7 @@ const App = () => {
   const resetState = () => {
     setFetching(false);
     setAddress("");
-    setLibrary(null);
+    setWeb3Provider(null);
     setConnected(false);
     setChainId(1);
     setPedningRequest(false);
@@ -197,10 +209,13 @@ const App = () => {
           chainId={chainId}
           killSession={resetApp}
         />
-        <ContractComponent
-          setIsFetching={setFetching}
-          eventsContract={eventsContract}
-        />
+        {connected && (
+          <ContractComponent
+            signer={signer}
+            setIsFetching={setFetching}
+            eventsContract={eventsContract}
+          />
+        )}
         <SContent>
           {fetching ? (
             <Column center>
