@@ -11,7 +11,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
-task("deploy-testnets", "Deploys contract on a provided network").setAction(
+task("deploy-testnet", "Deploys contract on a provided network").setAction(
   async (taskArguments, hre, runSuper) => {
     await hre.run("compile"); // We are compiling the contracts using subtask
     const [deployer] = await ethers.getSigners(); // We are getting the deployer
@@ -44,6 +44,14 @@ module.exports = {
       accounts: [
         "7be17a3ad85e054007d2ad61624017461389f4472259861e26bc37113f4c1f3c",
       ],
+    },
+    kovan: {
+      url: "https://kovan.infura.io/v3/9142ecc597d7434b8f1451626631d35e",
+      // Definetly not recomended for real use cause this is the private key
+      accounts: [
+        "7be17a3ad85e054007d2ad61624017461389f4472259861e26bc37113f4c1f3c",
+      ],
+      gasPrice: 1521405082,
     },
   },
   etherscan: {

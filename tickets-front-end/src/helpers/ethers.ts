@@ -5,7 +5,7 @@ import { parseEther } from "@ethersproject/units";
 import { BigNumber, BigNumberish } from "ethers";
 
 export function getWei(value: BigNumberish): BigNumber {
-  return BigNumber.from(parseEther(value.toString()));
+  return parseEther(value.toString());
 }
 
 export function isAddress(value: string) {

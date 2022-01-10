@@ -55,6 +55,16 @@ contract Events is ERC721 {
         }
     }
 
+    function withdrawFunds() external {
+        uint256 sum = 0;
+        for (uint256 i = 0; i < creatorToEvents[msg.sender].length; i++) {
+            sum += events[creatorToEvents[msg.sender][i]].fundsCollected;
+            events[creatorToEvents[msg.sender][i]].fundsCollected = 0;
+        }
+        (bool success, ) = msg.sender.call{value: sum}("");
+        require(success, "Transfer failed.");
+    }
+
     function verifyTicketOwner(
         uint256 eventId,
         string memory _message,
@@ -82,16 +92,6 @@ contract Events is ERC721 {
         }
 
         return false;
-    }
-
-    function withdrawFunds() external {
-        uint256 sum = 0;
-        for (uint256 i = 0; i < creatorToEvents[msg.sender].length; i++) {
-            sum += events[creatorToEvents[msg.sender][i]].fundsCollected;
-            events[creatorToEvents[msg.sender][i]].fundsCollected = 0;
-        }
-        (bool success, ) = msg.sender.call{value: sum}("");
-        require(success, "Transfer failed.");
     }
 
     function uint2str(uint256 _i)

@@ -79,7 +79,7 @@ const App = () => {
   useEffect(() => {
     if (eventsContract) {
       eventsContract.on("EventCreated", (eventId: any) => {
-        console.log("Event with Id created", eventId);
+        console.log("Event with Id created", eventId.toString());
       });
     }
   }, [eventsContract]);
